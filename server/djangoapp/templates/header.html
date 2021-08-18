@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark ">
-      <a class="navbar-brand" href="/djangoapp/">Navbar</a>
+      <a class="navbar-brand" href="/djangoapp/">Dealership Review</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -12,9 +12,30 @@
           <li class="nav-item">
             <a class="nav-link" href="/djangoapp/contact">Contact Us</a>
           </li>
+        </ul>
+          <ul class="nav navbar-nav navbar-right ml-auto">
+            {% if user.is_authenticated %}
+            <li>
+                <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+            </li>
+            {% else %}
+            <li>
+                
+                    
+                    
+                <a class="btn btn-link" href = "/djangoapp/login">Login</a>
+                <a class="btn btn-link" href="/djangoapp/signup">Sign Up</a>
+                    
+                
+            </li>
+            {% endif %}
+        </ul>
+          <!--
           <li class="nav-item">
             <a class="nav-link disabled" href="#">Disabled</a>
           </li>
+          
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
@@ -22,11 +43,11 @@
               <a class="dropdown-item" href="#">Another action</a>
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
-          </li>
+          </li> 
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+        </form> -->
       </div>
 </nav>

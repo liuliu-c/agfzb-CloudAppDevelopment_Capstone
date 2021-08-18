@@ -13,42 +13,41 @@
 
     <link href="https://getbootstrap.com/docs/5.1/examples/sign-in/signin.css" rel="stylesheet">
 </head>
-    <body>
-    <!--Add a registration form here -->
-  <!-- this template is taken from https://getbootstrap.com/docs/5.1/examples/sign-in/ -->
 
+    <body>
+    <!-- this template is taken from https://getbootstrap.com/docs/5.1/examples/sign-in/ -->
+    
+    <!--Add a nav bar here -->
 <main class="form-signin">
-  <form action="{% url 'djangoapp:signup' %}" method="post">
-  
-    <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
+  <form action="{% url 'djangoapp:login' %}"  method="post">
+  {% csrf_token %}
+    <h1 class="h3 mb-3 fw-normal">Login</h1>
 
     <div class="form-floating">
     <label for="username">User Name</label>
     <input type="text" class="form-control" placeholder="Enter User Name: " name="username" required>
       
     </div>
-
     <div class="form-floating">
-    <label for="firstname"><b>First Name</b></label>
-    <input type="text" class="form-control" placeholder="Enter First Name: " name="firstname" required>
+    <label for="psw">Password</label>
+      <input type="password" class="form-control"  placeholder="Enter Password: " name="psw" required>
+      
     </div>
 
-    <div class="form-floating">
-    <label for="lastname"><b>Last Name</b></label>
-    <input type="text" class="form-control" placeholder="Enter Last Name: " name="lastname" required>
-    </div>
 
-    <div class="form-floating">
-    <label for="psw"><b>Password</b></label>
-    <input type="password" class="form-control" placeholder="Enter Password: " name="psw" required>
-    </div>
-
-{% csrf_token %}
-
-
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
     
   </form>
 </main>
-    </body>
+
+
+
+
+        
+
+
+
+   
+
+</body>
 </html>
