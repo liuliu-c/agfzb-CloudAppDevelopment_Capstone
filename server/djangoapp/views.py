@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
-from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf
+from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -114,8 +114,13 @@ def get_dealer_details(request, dealer_id):
     if request.method == "GET":
         url = "https://7f8c56ac.us-south.apigw.appdomain.cloud/reviews/get-review?dealerId"
         reviews_got = get_dealer_by_id_from_cf(url, dealer_id)
-        
-        review = ' '.join([review_got.review for review_got in reviews_got])
+        review = {}
+        #print(len(reviews_got))
+        review['review'] = reviews_got[0].review 
+        review['sentiment'] = reviews_got[0].sentiment
+        #or review_got in reviews_got:
+
+        #review = ' '.join([review_got.review +':' review_got.sentiment for review_got in reviews_got])
         # Return a list of dealer short name
         #print(dealer_names)
         context = {"reviews": review}
@@ -124,6 +129,22 @@ def get_dealer_details(request, dealer_id):
 
 
 # Create a `add_review` view to submit a review
-# def add_review(request, dealer_id):
-# ...
+def add_review(request, dealer_id):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            post_data = request.POST
+            review = {"name": "{request.user.first_name} {request.user.last_name}",
+                      "id":dealer_id,
+                      "review": post_data
+                      }
+
+            url = "https://7f8c56ac.us-south.apigw.appdomain.cloud/reviews_post/post-review"
+            json_payload = {"review": review} 
+            post_request(url, json_payload)
+    return redirect("djangoapp:dealer_details", dealer_id = dealer_id)
+
+
+
+
+
 
