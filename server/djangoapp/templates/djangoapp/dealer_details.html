@@ -19,8 +19,24 @@
     <!--Add a nav bar here -->
     {% include 'header.html' %}
     <!--Add a dealer table here -->
-    <div class="container">
-        {{reviews.review}}:{{reviews.sentiment}}
+    <div class="container mt-3" >
+        <div class="card-columns">
+            {% for review in reviews %}
+                <div class="card">
+                    <img class="card-img-left img-thumbnail" src ="{{MEDIA_URL}}/emoji/{{review.sentiment}}.png" style="max-width: 15%;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{review.car_make}}, {{review.car_model}}</h5>
+                        <h5 class="card-title">{{review.car_year}}</h5>
+                        <p class="card-text">{{review.review}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% if user.is_authenticated %}
+            <div class="text-center">
+                <a class="btn btn-primary mt-2" href="{% url 'djangoapp:add_review' dealer_id %}">Add Review</a>
+            </div>
+        {% endif %}
     </div>
     </body>
 
