@@ -24,12 +24,13 @@
         <label class="form-check-label mt-2 ml-4" for="purchasecheck">Check me out if you have purchased the car.</label>
         
         <div class="form-group">
-            <label for="car" class="font-weight-bold">Select our car (model-make-year):</label>
-        <select name="car" id="car" class="form-select mt-2" required>
-        {% for car in cars %}
-             <option selected value={{car.id}}>{{car.name}}-{{car.make.name}}-{{ car.year|date:"Y" }}</option>
-        {% endfor %}
-        </select>
+            <label for="carmodel" class="font-weight-bold">Input your car model:</label>
+            <textarea class="form-control" id="carmodel" name="carmodel" rows="1" style="max-width: 10%;" required></textarea>
+            <label for="carmake" class="font-weight-bold">Input your car make:</label>
+            <textarea class="form-control" id="carmake" name="carmake" rows="1" style="max-width: 10%;" required></textarea>
+            <label for="caryear" class="font-weight-bold">Input your car year:</label>
+            <textarea class="form-control" id="caryear" name="caryear" rows="1" style="max-width: 10%;" required></textarea>
+            
         </div>
 
         

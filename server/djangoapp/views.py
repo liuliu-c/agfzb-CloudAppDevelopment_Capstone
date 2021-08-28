@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-# from .models import related models
+from . import models
 from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -133,18 +133,32 @@ def add_review(request, dealer_id):
     if request.user.is_authenticated:
         if request.method == "POST":
             post_data = request.POST
-            review = {"name": "{request.user.first_name} {request.user.last_name}",
-                      "id":dealer_id,
+            
+            if request.user.first_name == '':
+                name = "root" 
+            else:
+                name = request.user.first_name +" "+ request.user.last_name
+            review = {"name": name,
+                      "id": dealer_id,
                       "review": post_data["content"],
-                      "purchase":post_data.get("purchasecheck")
+                      "purchase":post_data.get("purchasecheck")!= None,
+                      "purchase_date":post_data["purchasedate"],
+                      "car_make": post_data["carmake"],
+                      "car_model": post_data["carmodel"],
+                      "car_year":post_data["caryear"]
                       }
-            car = models.CarModel.objects.get()
+            #car = models.CarModel.objects.get()
 
             url = "https://7f8c56ac.us-south.apigw.appdomain.cloud/reviews_post/post-review"
             json_payload = {"review": review} 
-            post_request(url, json_payload)
+            json_payload = json.dumps(json_payload)
+            mes = post_request(url, json_payload)
+            print("!!!!!", mes)
             return redirect("djangoapp:dealer_details", dealer_id = dealer_id)
-        else:
+        elif request.method == "GET":
+            #url = "https://7f8c56ac.us-south.apigw.appdomain.cloud/reviews/get-review?dealerId"
+            #reviews_got = get_dealer_by_id_from_cf(url, dealer_id)
+
             context = {"dealer_id":dealer_id}
             return render(request, 'djangoapp/add_review.html', context)
 

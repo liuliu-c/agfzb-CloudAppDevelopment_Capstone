@@ -34,7 +34,7 @@
         </div>
         {% if user.is_authenticated %}
             <div class="text-center">
-                <a class="btn btn-primary mt-2" href="{% url 'djangoapp:add_review' dealer_id %}">Add Review</a>
+                <a class="btn btn-primary mt-2" href="{% url 'djangoapp:add_review' dealer_id %}" method="get">Add Review</a>
             </div>
         {% endif %}
     </div>

@@ -5,6 +5,7 @@ from requests.auth import HTTPBasicAuth
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions
+import http.client
 
 # Create a `get_request` to make HTTP GET requests
 # e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
@@ -33,13 +34,30 @@ def get_request(url, **kwargs):
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
 def post_request(url, json_payload, **kwargs):
-
+    #print(json_payload)
     try:
-        response = request.post(url, params=kwargs, json=json_payload)
-    except:
-        print("Post error occurred")
+         
+        #response = requests.post(url, headers={'Content-Type': 'application/json'}, json=json_payload)
+        conn = http.client.HTTPSConnection("7f8c56ac.us-south.apigw.appdomain.cloud")
 
-    return response
+        payload = json_payload
+
+        headers = {
+            'content-type': "application/json",
+            'accept': "application/json"
+            }
+
+        conn.request("POST", "/reviews_post/post-review", payload, headers)
+
+        res = conn.getresponse()
+        data = res.read()
+
+        return data.decode("utf-8")
+    except:
+        #print(response)
+        return "Post error occurred"
+    #print(response)
+    #return response
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
 # def get_dealers_from_cf(url, **kwargs):
@@ -108,14 +126,17 @@ def analyze_review_sentiments(text):
         )
 
     natural_language_understanding.set_service_url('https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/4422bdbe-eb3f-42e1-a329-b62559ed7d9e')
+    try:
+        response = natural_language_understanding.analyze(
+            text=text,
+            features=Features(sentiment=SentimentOptions())).get_result()
 
-    response = natural_language_understanding.analyze(
-        text=text,
-        features=Features(sentiment=SentimentOptions())).get_result()
-
-    #print(json.dumps(response, indent=2))
-    result = response["sentiment"]["document"]["label"]
-    #result = "hi"
-    return result
+        #print(json.dumps(response, indent=2))
+        result = response["sentiment"]["document"]["label"]
+        #result = "hi"
+        return result
+    except:
+        # if not enough text, just return neutral
+        return "neutral"
 
 
